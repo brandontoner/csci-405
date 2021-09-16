@@ -1,0 +1,88 @@
+\documentclass{article}%
+\usepackage{amsmath}%
+\usepackage{amsfonts}%
+\usepackage{amssymb}%
+\usepackage{graphicx}
+\usepackage[]{algorithm2e}
+%-------------------------------------------
+\newtheorem{theorem}{Theorem}
+\newtheorem{acknowledgement}[theorem]{Acknowledgement}
+%\newtheorem{algorithm}[theorem]{Algorithm}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{case}[theorem]{Case}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{criterion}[theorem]{Criterion}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{solution}[theorem]{Solution}
+\newtheorem{summary}[theorem]{Summary}
+\newenvironment{proof}[1][Proof]{\textbf{#1.} }{\ \rule{0.5em}{0.5em}}
+\setlength{\textwidth}{7.0in}
+\setlength{\oddsidemargin}{-0.35in}
+\setlength{\topmargin}{-0.5in}
+\setlength{\textheight}{9.0in}
+\setlength{\parindent}{0.3in}
+\linespread{1.6}
+\begin{document}
+
+\begin{flushright}
+\textbf{Brandon Toner \\
+\today}
+\end{flushright}
+
+\begin{center}
+\textbf{CSCI 405: Algorithm Analysis II \\
+Homework 3: Elementary Graph Algorithms} \\
+\end{center}
+
+\begin{enumerate}
+\item 
+\begin{enumerate}
+\item AllIn(A) \\
+\begin{algorithm}[H]
+ \KwData{A : adjacency matrix}
+ \KwResult{vertex index, or -1 if no result}
+ $h = 0$\;
+ \While{$h < |v|$}{
+  $found = true$\;
+  \For{$k: h$ \KwTo $|V|$}{
+   \If{$(k \neq h)$ AND $(A[k, h] \neq 0$ OR $A[h, k] \neq 1)$} {
+     \lIf{$k > h$} { $h = k$ }
+     \lElse{$h = h + 1$}
+     found = false\;
+     break\;
+   }
+  }
+  \lIf{$found$} {\Return $h$}
+ }
+ \Return $-1$
+\end{algorithm}
+\item When a vertex satisfies the conditions, there is an edge from every other vertex to it, and there are no edges leading away from it.  If there are two such vertices, then they would each have an edge leading from the other to them, which would mean their out-degree is non-zero, which is a contradiction. Therefore, there must be at most one.
+\item The algorithm traverses each vertex, but it starts at the point it left off on the previous vertex, so there is only one walk across the matrix.
+\end{enumerate}
+\item The entries on the diagonal are how many edges enter or leave the vertex.  The other entries are equal to the additive inverse of the number of edges that go from vertex i to j or from j to i.  It's also symmetric, and the rows and columns add to zero although it's not important.
+\item  Diameter(V) \\
+\begin{algorithm}[H]
+ \KwData{v : vertex}
+ \KwResult{diameter and height of tree}
+ \lIf{$v = null$} {\Return $0, -1$}
+ lDiam, lHeight = Diameter(left(v))\;
+ rDiam, rHeight = Diameter(right(v))\;
+ height = Max(lHeight, rHeight) + 1\;
+ 
+ \Return Max(lHeight + rHeight + 2, lDiam, rDiam), height\;
+\end{algorithm}
+
+This algorithm is $Theata(V)$, since every vertex is only visited once.
+\end{enumerate}
+\end{document}

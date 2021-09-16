@@ -1,0 +1,93 @@
+\documentclass{article}%
+\usepackage{amsmath}%
+\usepackage{amsfonts}%
+\usepackage{amssymb}%
+\usepackage{graphicx}
+\usepackage[ruled,vlined]{algorithm2e}
+%-------------------------------------------
+\newtheorem{theorem}{Theorem}
+\newtheorem{acknowledgement}[theorem]{Acknowledgement}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{case}[theorem]{Case}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{criterion}[theorem]{Criterion}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{solution}[theorem]{Solution}
+\newtheorem{summary}[theorem]{Summary}
+\newenvironment{proof}[1][Proof]{\textbf{#1.} }{\ \rule{0.5em}{0.5em}}
+\setlength{\textwidth}{7.0in}
+\setlength{\oddsidemargin}{-0.35in}
+\setlength{\topmargin}{-0.5in}
+\setlength{\textheight}{9.0in}
+\setlength{\parindent}{0.3in}
+\begin{document}
+
+\begin{flushright}
+\textbf{Brandon Toner \\
+\today}
+\end{flushright}
+
+\begin{center}
+\textbf{CS 405: Algorithm Analysis II \\
+Homework 7: Greedy Algorithms} \\
+\end{center}
+
+\begin{enumerate}
+\item The $N$th floating point number will either be in one of the intervals found from processing the first $N-1$ numbers, or a new interval.  This algorithm assumes that if $G_N \in [v.max - 1, v.min + 1]$ then $G_N$ is in one of the previous intervals, and there is no need to check any more intervals.\\
+\begin{algorithm}
+    \DontPrintSemicolon
+    \KwData{$G, N$}
+    \Begin{
+        \If{$N=1$}{
+            \Return{$(min=G_0, max=G_0)$}
+        } \Else {
+            $data=UnitIntervals(G, N-1)$\\
+            \For{$v \in data$}{
+                \If{$G_N \leq v.min + 1$ \bf{and} $G_N \geq g.max - 1$} {
+                    \If{$G_N > v.max$} {
+                        $v.max=G_N$
+                    }
+                    \If{$G_N < v.min$} {
+                        $v.min=G_N$
+                    }
+                    \Return $data$
+                }
+            }
+           \Return $data + (min=G_N, max=G_N)$
+        }
+    }
+\caption{UnitInterval\label{IR}}
+\end{algorithm}
+
+\item This algorithm assumes that since multiplication is commutitiave, we can rearrange the product in a way that the fist element in the product will be the largest. Therefore the greedy choice for the first value will be to choose $i,j$ such that ${a_i}^{b_j}$ is a maximum. This value will be $a_m^{b_m}$ where $a_m = max(A)$ and $b_m = max(B)$, since decreaing the exponent or the base would decrease the value.  As for the optimal substructure, if we assume we have a perumtation, $S$ that is the optimal solution, and a subproblem $p \subset S$ p must also be an optimal solution.  If there were another permutation of the exponents that yeilded a larger product, we would be able to repalce the elements of $p$ in $S$ to make a larger solution, which is a contradiction that $S$ is the optimal solution.\\
+\begin{algorithm}
+    \DontPrintSemicolon
+    \KwData{$A, B$}
+    \Begin{
+        \If{$len(A)=1$}{
+            \Return{$pow(a_0, b_0)$}
+        } \Else {
+            $a_m = max(A)$\\
+            $b_m = max(B)$\\
+            \Return {$pow(a_m, b_m) * MaxProduct(A - a_m, B - b_m)$}
+        }
+    }
+\caption{MaxProduct\label{IR}}
+\end{algorithm}
+
+
+\end{enumerate}
+
+
+\end{document}
